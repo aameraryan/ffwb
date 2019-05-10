@@ -1,6 +1,32 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, DetailView, ListView
 from .models import Product
+from django.contrib import messages
+from .forms import RegisterForm
+
+
+class RegisterView(TemplateView):
+
+    template_name = 'portal/register.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = RegisterForm()
+        return context
+
+
+def register(request):
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'registered. now login')
+            redirect('portal:login')
+        else:
+            form = RegisterForm()
+    else:
+        form = RegisterForm()
+    return render(request, 'portal/login.html', {'form': form})
 
 
 class HomeView(TemplateView):
@@ -24,10 +50,18 @@ class ProductDetailView(DetailView):
         return super().get_object()
 
 
-    # def get_context_object_name(self, obj):
-    #     return
+class ProductListView(ListView):
+    model = Product
+    template_name = 'portal/product_list.html'
+    context_object_name = 'products'
 
 
+class AboutUsView(TemplateView):
+    template_name = 'portal/about_us.html'
+
+
+# def add_to_wish_list(request, product_id):
+#     product = get
 
 #
 # def home(request):

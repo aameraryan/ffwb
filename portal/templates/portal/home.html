@@ -93,7 +93,9 @@
                                     <img src="{{ product.get_base_photo_url }}" alt="">
                                 </div>
                                 <div class="favorite favorite_left"></div>
-                                <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>{{ product.get_off_price }}</span></div>
+                                {% if product.tag %}
+                                <div class="product_bubble product_bubble_right product_bubble_red d-flex flex-column align-items-center"><span>{{ product.tag }}</span></div>
+                                {% endif %}
                                 <div class="product_info">
                                     <h6 class="product_name"><a href="{{ product.get_absolute_url }}">{{ product.headline }}</a></h6>
                                     <div class="product_price">{{ product.price }}<span>{{ product.actual_price }}</span></div>

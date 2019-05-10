@@ -1,0 +1,21 @@
+{% extends "portal/base.html" %}
+{% load static %}
+
+{% block title %}Logout{% endblock %}
+
+{% block custom_links %}
+    <link rel="stylesheet" type="text/css" href="{% static "styles/main_styles.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "styles/responsive.css" %}">
+{% endblock %}
+
+{% block content %}
+
+    <br><br><br><br><br><br><br>
+    <div class="jumbotron container text-center">
+
+        <h4>Thank you for being with us..</h4>
+        <a href="{% url "portal:login" %}">Login again</a>
+
+    </div>
+
+{% endblock %}

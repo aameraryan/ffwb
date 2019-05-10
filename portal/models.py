@@ -2,9 +2,18 @@ from django.db import models
 from .managers import ProductManager
 from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
+from django.conf import settings
+from django.db.models.signals import post_save, pre_save
+from django.conf import settings
 
+USER_MODEL = settings.AUTH_USER_MODEL
 
 PREFERENCE_CHOICES = ((1, 'Excellent'), (2, 'Very Good'), (3, 'Good'), (4, 'Average'))
+
+#
+# def create_cart(instance, sender, *args, **kwargs):
+#     if not hasattr(instance, 'cart'):
+#         Cart.objects.new(user=instance)
 
 
 class Size(models.Model):
@@ -75,6 +84,7 @@ class Product(models.Model):
     preference = models.PositiveSmallIntegerField(default=2, choices=PREFERENCE_CHOICES)
 
     categories = models.ManyToManyField(Category)
+    tag = models.CharField(max_length=5, blank=True)
 
     available_pieces = models.PositiveSmallIntegerField(default=100)
     out_of_stock = models.BooleanField(default=False)
@@ -95,7 +105,7 @@ class Product(models.Model):
 
     @property
     def get_non_base_photos(self):
-        return self.productphoto_set.filter(base_photo=False).values_list('photo', flat=True)
+        return self.productphoto_set.filter(base_photo=False)
 
     @property
     def get_off_price(self):
@@ -121,8 +131,45 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('portal:product_detail', kwargs={'product_id': self.id})
 
+    def clean(self):
+        if self.productphoto_set.filter(base_photo=True).count() != 1:
+            raise ValidationError("There should be exact 1 base photo")
 
-
-    # def clean(self):
-    #     if self.productphoto_set.filter(base_photo=True).count() != 1:
-    #         raise ValidationError("There should be exact 1 base photo")
+#
+# class DeliveryMan(models.Model):
+#     name = models.CharField(max_length=32)
+#     details = models.TextField(blank=True)
+#
+#
+# class SingleProductOrder(models.Model):
+#     product = models.ForeignKey(Product, on_delete=models.PROTECT)
+#     quantity = models.PositiveSmallIntegerField(default=1)
+#     price = models.DecimalField(max_digits=6, decimal_places=2)
+#     amount = models.DecimalField(max_digits=6, decimal_places=2, blank=True)
+#
+#     order = models.ForeignKey('Order', on_delete=models.PROTECT)
+#
+#     def __str__(self):
+#         return "{} - {} X {} = {}".format(self.product.name, self.price, self.quantity, self.amount)
+#
+#
+# def add_amount_to_single_product_order(sender, instance, *args, **kwargs):
+#     if instance.amount != (instance.price*instance.quantity):
+#         instance.amount = instance.price*instance.quantity
+#         instance.save()
+#
+#
+# pre_save.connect(add_amount_to_single_product_order, sender=SingleProductOrder)
+#
+#
+# class Order(models.Model):
+#     cart = models.ForeignKey(Cart, on_delete=models.PROTECT)
+#     # single_product_orders = models.ManyToManyField(Product)
+#
+#     created_on = models.DateTimeField(auto_now_add=True)
+#     delivery_before = models.DateField()
+#     deliverd_on = models.DateTimeField(blank=True, null=True)
+#
+#     delivery_man = models.ForeignKey(DeliveryMan, on_delete=models.PROTECT)
+#
+#     details = models.TextField(blank=True)

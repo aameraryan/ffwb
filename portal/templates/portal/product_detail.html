@@ -42,7 +42,7 @@
 								<ul>
 									<li class="active"><img src="{{ product.get_base_photo_url }}" alt="" data-image="{{ product.get_base_photo_url }}"></li>
                                     {% for photo in product.get_non_base_photos %}
-                                        <li><img src="{{ photo.url }}" alt="" data-image="{{ photo.url }}"></li>
+                                        <li><img src="{{ photo.get_photo_url }}" alt="" data-image="{{ photo.get_photo_url }}"></li>
                                     {% endfor %}
 								</ul>
 							</div>
