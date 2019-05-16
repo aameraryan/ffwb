@@ -31,6 +31,12 @@
 
 <body>
 
+{% if messages %}
+    {% for message in messages %}
+        <span class="alert alert-{{ message.tags }}">{{ message }}</span>
+    {% endfor %}
+{% endif %}
+
 <div class="super_container">
 
 	<!-- Header -->
@@ -85,7 +91,7 @@
 						<nav class="navbar">
 							<ul class="navbar_menu">
 								<li><a href="{% url "portal:home" %}">home</a></li>
-								<li><a href="{% url "portal:product_list" %}">all products</a></li>
+								<li><a href="{% url "products:product_list" %}">all products</a></li>
 								<li><a href="#">policies</a></li>
 								<li><a href="{% url "portal:about_us" %}">about us</a></li>
 							</ul>
@@ -96,7 +102,7 @@
 								<li class="a"><a href="#"><i class="fa fa-user" aria-hidden="true"></i></a></li>
 
                                 <li class="checkout">
-									<a href="{% url "cart:home" %}">
+									<a href="{% url "carts:home" %}">
 										<i class="fa fa-shopping-cart" aria-hidden="true"></i>
 										<span id="checkout_items" class="checkout_items">2</span>
 									</a>
@@ -129,7 +135,7 @@
                             <li><a href="{% url "portal:register" %}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
                         {% else %}
                             <li><a href="{% url "portal:logout" %}"><i class="fa fa-sign-in" aria-hidden="true"></i> Logout</a></li>
-                            <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a></li>
+{#                            <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a></li>#}
                         {% endif %}
 					</ul>
 				</li>
@@ -196,8 +202,11 @@
     <script src="{% static "plugins/easing/easing.js" %}"></script>
 {% endblock %}
 
-{% block extrascript %}
+{% block extrajs %}
         <script src="{% static "js/custom.js" %}"></script>
+{% endblock %}
+
+{% block extrascript %}
 {% endblock %}
 
 </body>

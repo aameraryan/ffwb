@@ -101,7 +101,7 @@
                                     <div class="product_price">{{ product.price }}<span>{{ product.actual_price }}</span></div>
                                 </div>
                             </div>
-                            <div class="red_button add_to_cart_button"><a href="#">add to cart</a></div>
+                            <div class="red_button add_to_cart_button"><a href="{{ product.get_add_to_cart_url }}">add to cart</a></div>
                         </div>
 
                     {% endfor %}

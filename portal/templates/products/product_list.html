@@ -20,8 +20,8 @@
 
                     <div class="breadcrumbs d-flex flex-row align-items-center">
                         <ul>
-                            <li><a href="index.html">Home</a></li>
-                            <li class="active"><a href="index.html"><i class="fa fa-angle-right" aria-hidden="true"></i>Men's</a></li>
+                            <li><a href="../portal/index.html">Home</a></li>
+                            <li class="active"><a href="../portal/index.html"><i class="fa fa-angle-right" aria-hidden="true"></i>Men's</a></li>
                         </ul>
                     </div>
 
@@ -158,7 +158,7 @@
                                                           <div class="product_price">{{ product.price }}<span>{{ product.actual_price }}</span></div>
                                                       </div>
                                                   </div>
-                                              <div class="red_button add_to_cart_button"><a href="#">add to cart</a></div>
+                                              <div class="red_button add_to_cart_button"><a href="{{ product.get_add_to_cart_url }}">add to cart</a></div>
                                               </div>
                                         {% endfor %}
                                     </div>
@@ -206,7 +206,7 @@
 
 {% endblock %}
 
-{% block extrascript %}
+{% block extrajs %}
     <script src="{% static "plugins/jquery-ui-1.12.1.custom/jquery-ui.js" %}"></script>
     <script src="{% static "js/categories_custom.js" %}"></script>
 {% endblock %}

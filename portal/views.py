@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, DetailView, ListView
-from .models import Product
+from products.models import Product
 from django.contrib import messages
 from .forms import RegisterForm
 
@@ -37,23 +37,6 @@ class HomeView(TemplateView):
         context['new_products'] = Product.objects.new_products()
         context['preferred_products'] = Product.objects.preferred_products()
         return context
-
-
-class ProductDetailView(DetailView):
-    template_name = 'portal/product_detail.html'
-    pk_url_kwarg = "product_id"
-    context_object_name = 'product'
-
-    model = Product
-
-    def get_object(self, queryset=None):
-        return super().get_object()
-
-
-class ProductListView(ListView):
-    model = Product
-    template_name = 'portal/product_list.html'
-    context_object_name = 'products'
 
 
 class AboutUsView(TemplateView):
