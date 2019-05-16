@@ -1,0 +1,1 @@
+ORDER_PLACED_MESSAGE = 'Order Placed Succesfully'

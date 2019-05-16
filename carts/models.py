@@ -1,17 +1,18 @@
 from django.db import models
 from django.conf import settings
-from .managers import CartManager
+from .managers import CartManager, EntryManager
 from products.models import Product
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, m2m_changed
 from django.http import Http404
+from django.utils import timezone
+from django.db.models import Aggregate, Count, Sum
 
 USER_MODEL = settings.AUTH_USER_MODEL
 
 
 class Cart(models.Model):
     user = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
-    total = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-    # products = models.ManyToManyField('products.Product')
+    total = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
@@ -24,6 +25,27 @@ class Cart(models.Model):
     def __str__(self):
         return str(self.id)
 
+    def make_ordered(self):
+        self.ordered = True
+        self.ordered_on = timezone.now()
+        self.save()
+        return self
+
+    @property
+    def is_non_empty(self):
+        return self.entry_set.all()
+
+
+def upgrade_total(sender, instance, *args, **kwargs):
+    total = instance.entry_set.all().aggregate(Sum('amount')).get('amount__sum', 0.00)
+    total = 0.00 if total is None else total
+    if instance.total != total:
+        instance.total = total
+        instance.save()
+
+
+post_save.connect(upgrade_total, sender=Cart)
+
 
 class Entry(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
@@ -34,6 +56,8 @@ class Entry(models.Model):
 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+    objects = EntryManager()
 
     def __str__(self):
         return "{} - {} X {} = {}".format(self.product.name, self.price, self.quantity, self.amount)
