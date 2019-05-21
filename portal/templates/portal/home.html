@@ -101,7 +101,12 @@
                                     <div class="product_price">{{ product.price }}<span>{{ product.actual_price }}</span></div>
                                 </div>
                             </div>
-                            <div class="red_button add_to_cart_button"><a href="{{ product.get_add_to_cart_url }}">add to cart</a></div>
+                            <div class="red_button add_to_cart_button">
+                                    <a class="addToCartButton" id="product{{product.id}}" href="#" data-product_id="{{ product.id }}">Add To Cart</a>
+    <p id="message"></p>
+
+{#                                <a href="{{ product.get_add_to_cart_url }}">add to cart</a>#}
+                            </div>
                         </div>
 
                     {% endfor %}

@@ -11,7 +11,8 @@ USER_MODEL = settings.AUTH_USER_MODEL
 
 
 class Cart(models.Model):
-    user = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
+    user = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE)
+
     total = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
 
     created_on = models.DateTimeField(auto_now_add=True)

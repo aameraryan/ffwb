@@ -1,2 +1,4 @@
 django==2
 pillow
+django-filter
+django-lazysignup

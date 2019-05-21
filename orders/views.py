@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Order, DeliveryAddress
+from .models import Order
 from django.http import Http404
 import datetime
 from carts.models import Cart, Entry
@@ -7,7 +7,8 @@ from products.models import Product
 from django.contrib import messages
 from . import alert_messages
 import decimal
-from .forms import DeliveryAddressAddForm
+from addresses.forms import DeliveryAddressAddForm
+from addresses.models import DeliveryAddress
 
 
 def checkout(request):
@@ -37,12 +38,3 @@ def created(request, order_id):
     return render(request, 'order/created.html', {'order': order})
 
 
-def delivery_address_add(request):
-    if request.method == "POST":
-        form = DeliveryAddressAddForm(request.POST)
-        if form.is_valid():
-            form = form.save(commit=False)
-            form.user = request.user
-            form.save()
-            return redirect('orders:checkout')
-    raise Http404('Bad Request')

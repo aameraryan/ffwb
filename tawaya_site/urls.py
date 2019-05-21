@@ -18,12 +18,15 @@ from django.urls import path
 from django.conf.urls import url, include
 from django.conf import settings
 from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'', include('portal.urls', namespace='portal')),
-    url(r'cart/', include('carts.urls', namespace='carts')),
-    url(r'order/', include('orders.urls', namespace='orders')),
-    url(r'product/', include('products.urls', namespace='products')),
+    url(r'^convert/', include('lazysignup.urls')),
+    url(r'^', include('portal.urls', namespace='portal')),
+    url(r'^cart/', include('carts.urls', namespace='carts')),
+    url(r'^order/', include('orders.urls', namespace='orders')),
+    url(r'^product/', include('products.urls', namespace='products')),
+    url(r'^addresses/', include('addresses.urls', namespace='addresses')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 

@@ -114,11 +114,11 @@
       <div class="container">
         <div class="row mb-5">
           <form class="col-md-12" method="post" action="{% url "orders:create" %}">
-            <div class="site-blocks-table">
+            <div class="site-blocks-table table-responsive text-nowrap">
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th class="product-thumbnail">Image</th>
+                    <th class="product-thumbnail">Imagei</th>
                     <th class="product-name">Product</th>
                     <th class="product-price">Price</th>
                     <th class="product-quantity">Quantity</th>
@@ -131,7 +131,7 @@
                     {% for entry in cart.entry_set.all %}
                         <tr>
                             <td class="product-thumbnail">
-                              <img src="{{ entry.product.get_base_photo_url }}" alt="Image" class="img-fluid">
+                              <img src="{{ entry.product.get_base_photo_url }}" height=200 width="200px" alt="Image" class="img-fluid">
                             </td>
                             <td class="product-name">
                               <h2 class="h5 text-black">{{ entry.product.name }}</h2>
@@ -228,6 +228,13 @@
         </div>
       </div>
     </div>
+
+
+  <div class="jumbotron container">
+      {% for order in orders %}
+          <span class="alert btn btn-info">{{ order }}</span>
+      {% endfor %}
+  </div>
 
     <footer class="site-footer border-top">
       <div class="container">

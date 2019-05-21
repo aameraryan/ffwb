@@ -1,32 +1,25 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic import TemplateView, DetailView, ListView, FormView
 from products.models import Product
 from django.contrib import messages
 from .forms import RegisterForm
+from django.contrib.auth import login, authenticate
 
 
-class RegisterView(TemplateView):
+class RegisterView(FormView):
 
     template_name = 'portal/register.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = RegisterForm()
-        return context
+    form_class = RegisterForm
 
-
-def register(request):
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'registered. now login')
-            redirect('portal:login')
-        else:
-            form = RegisterForm()
-    else:
-        form = RegisterForm()
-    return render(request, 'portal/login.html', {'form': form})
+    def form_valid(self, form):
+        form.save()
+        messages.info(self.request, "Thanks for registering. You are now logged in.")
+        new_user = authenticate(username=form.cleaned_data['username'],
+                                password=form.cleaned_data['password1'],
+                                )
+        login(self.request, new_user)
+        return redirect("portal:home")
 
 
 class HomeView(TemplateView):
@@ -41,16 +34,3 @@ class HomeView(TemplateView):
 
 class AboutUsView(TemplateView):
     template_name = 'portal/about_us.html'
-
-
-# def add_to_wish_list(request, product_id):
-#     product = get
-
-#
-# def home(request):
-#     context = {
-#         'new_products': Product.objects.new_products(),
-#         'preferred_products': Product.objects.preferred_products(),
-#         'active_products': Product.objects.active_products(),
-#     }
-#     return render(request, 'portal/home.html', context)

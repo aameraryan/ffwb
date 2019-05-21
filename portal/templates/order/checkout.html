@@ -119,7 +119,7 @@
             <h2 class="h3 mb-3 text-black">Billing Details</h2>
             <div class="p-3 p-lg-5 border">
 
-             <form method="post" name="address_add_form" action="{% url "orders:delivery_address_add" %}">
+             <form method="post" name="address_add_form" action="{% url "addresses:add" %}">
                  {% csrf_token %}
 
                  {{ addresss_add_form.as_table }}

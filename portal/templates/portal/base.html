@@ -1,4 +1,6 @@
 {% load static %}
+{% load i18n lazysignup_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,9 +11,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="Colo Shop Template">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
 
 {% block common_links %}
+
     <link rel="stylesheet" type="text/css" href="{% static "styles/bootstrap4/bootstrap.min.css" %}">
     <link href="{% static "plugins/font-awesome-4.7.0/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="{% static "plugins/OwlCarousel2-2.2.1/owl.carousel.css" %}">
@@ -63,12 +67,15 @@
 										<i class="fa fa-angle-down"></i>
 									</a>
 									<ul class="account_selection">
-                                        {% if not user.is_authenticated %}
+                                        {% if user|is_lazy_user %}
                                             <li><a href="{% url "portal:login" %}"><i class="fa fa-sign-in" aria-hidden="true"></i> Log In</a></li>
-                                            <li><a href="{% url "portal:register" %}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
-                                        {% else %}
+                                            <li><a href="{% url "lazysignup_convert" %}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
+                                        {% elif not user|is_lazy_user and user.is_authenticated  %}
                                             <li><a href="{% url "portal:logout" %}"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                             <li><a href="#"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a></li>
+                                        {% elif not user.is_authenticated %}
+                                            <li><a href="{% url "portal:login" %}"><i class="fa fa-sign-in" aria-hidden="true"></i> Log In</a></li>
+                                            <li><a href="{% url "portal:register" %}"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</a></li>
                                         {% endif %}
 									</ul>
 								</li>
@@ -192,6 +199,27 @@
 	</footer>
 
 </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $('.addToCartButton').click(function(){
+    var product_id;
+    product_id = $(this).attr("data-product_id");
+    $.ajax(
+    {
+        type:"GET",
+        url: "{% url "carts:add_product" %}",
+        data:{
+            product_id: product_id
+        },
+        success: function( data )
+        {
+            $( '#product'+ product_id ).remove();
+            $( '#message' ).text(data);
+        }
+     })
+});
+</script>
 
 {% block common_scripts %}
     <script src="{% static "js/jquery-3.2.1.min.js" %}"></script>

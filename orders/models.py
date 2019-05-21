@@ -3,30 +3,6 @@ from django.conf import settings
 from django.db.models.signals import pre_save, post_save
 from django.utils import timezone
 
-USER_MODEL = settings.AUTH_USER_MODEL
-
-
-class DeliveryAddress(models.Model):
-
-    user = models.ForeignKey(USER_MODEL, on_delete=models.CASCADE)
-    address_line_1 = models.CharField(max_length=264)
-    address_line_2 = models.CharField(max_length=264)
-    address_line_3 = models.CharField(max_length=264)
-
-    address_type = models.CharField(max_length=32, default='Home')
-    city = models.CharField(max_length=32, default='Pune')
-
-    contact_no = models.CharField(max_length=13)
-
-    active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.get_headline
-
-    @property
-    def get_headline(self):
-        return self.address_line_1
-
 
 class OrderManager(models.Manager):
 
@@ -38,16 +14,16 @@ class OrderManager(models.Manager):
 
 class Order(models.Model):
 
-    ORDER_STATUS_CHOICES = (('PL', "Placed"), ('PK', "Packed"), ("SH", "Shipped"))
+    STATUS_CHOICES = (('PL', "Placed"), ('PK', "Packed"), ("DL", "Delivered"))
 
-    cart = models.OneToOneField('carts.Cart', on_delete=models.SET_NULL, blank=True, null=True)
+    cart = models.OneToOneField('carts.Cart', on_delete=models.CASCADE)
     total_amount = models.DecimalField(max_digits=6, decimal_places=2)
     delivery_amount = models.DecimalField(max_digits=6, decimal_places=2)
     payment_type = models.CharField(max_length=3, default='COD')
-    delivery_address = models.ForeignKey(DeliveryAddress, on_delete=models.PROTECT)
+    delivery_address = models.ForeignKey('addresses.DeliveryAddress', on_delete=models.PROTECT)
 
     created_on = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=2, choices=ORDER_STATUS_CHOICES, default="PL")
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default="PL")
     delivery_before = models.DateField(default=timezone.now()+timezone.timedelta(days=5))
     deliverd_on = models.DateTimeField(blank=True, null=True)
 

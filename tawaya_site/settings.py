@@ -31,6 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_filters',
+    'lazysignup',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     'carts',
     'orders',
     'products',
+    'addresses',
 ]
 
 MIDDLEWARE = [
@@ -122,6 +126,25 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+
+#   LAZY SIGNUP
+
+AUTHENTICATION_BACKENDS = (
+  'django.contrib.auth.backends.ModelBackend',
+  'lazysignup.backends.LazySignupBackend',
+)
+
+
+# LAZYSIGNUP_CUSTOM_USER_CREATION_FORM = 'tawaya_site.portal.forms.RegisterForm'
+# LAZYSIGNUP_CUSTOM_USER_CREATION_FORM = 'portal.forms.RegistrationForm'
+
+
+from django.urls import reverse_lazy
+
+LOGIN_URL = reverse_lazy('portal:login')
+LOGIN_REDIRECT_URL = reverse_lazy('portal:home')
+
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')

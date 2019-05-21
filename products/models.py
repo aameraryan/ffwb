@@ -8,18 +8,20 @@ from django.conf import settings
 
 USER_MODEL = settings.AUTH_USER_MODEL
 
-PREFERENCE_CHOICES = ((1, 'Excellent'), (2, 'Very Good'), (3, 'Good'), (4, 'Average'))
-
 
 class Size(models.Model):
     name = models.CharField(max_length=32)
     abbrevation = models.CharField(max_length=8)
     length = models.CharField(max_length=16)
-    unit = models.CharField(max_length=16)
+    unit = models.CharField(max_length=16, default="Inch")
     details = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
+
+    @property
+    def get_text(self):
+        return self.abbrevation
 
 
 class Color(models.Model):
@@ -35,6 +37,10 @@ class Color(models.Model):
     def get_hex_code(self):
         return self.hex_code
 
+    @property
+    def get_text(self):
+        return self.abbrevation
+
 
 class PhotoPosition(models.Model):
     name = models.CharField(max_length=32)
@@ -43,6 +49,10 @@ class PhotoPosition(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def get_text(self):
+        return self.abbrevation
 
 
 class ProductPhoto(models.Model):
@@ -59,6 +69,10 @@ class ProductPhoto(models.Model):
     def get_photo_url(self):
         return self.photo.url
 
+    @property
+    def get_position(self):
+        return self.position.get_text
+
 
 class Category(models.Model):
     name = models.CharField(max_length=16)
@@ -67,8 +81,15 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def get_text(self):
+        return self.name
+
 
 class Product(models.Model):
+
+    PREFERENCE_CHOICES = ((1, 'Excellent'), (2, 'Very Good'), (3, 'Good'), (4, 'Average'))
+
     name = models.CharField(max_length=16)
     headline = models.CharField(max_length=48)
     details = models.TextField(blank=True)
@@ -77,6 +98,8 @@ class Product(models.Model):
     sizes = models.ManyToManyField(Size)
     colors = models.ManyToManyField(Color)
     preference = models.PositiveSmallIntegerField(default=2, choices=PREFERENCE_CHOICES)
+
+    current_ocassion = models.BooleanField(default=False)
 
     categories = models.ManyToManyField(Category)
     tag = models.CharField(max_length=5, blank=True)
@@ -93,6 +116,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def get_headline(self):
+        return self.headline
 
     @property
     def get_base_photo_url(self):
@@ -134,7 +161,6 @@ class Product(models.Model):
     def get_remove_from_cart_url(self):
         return reverse_lazy('carts:remove_product', kwargs={'product_id': self.id})
 
-
-    # def clean(self):
-    #     if self.productphoto_set.filter(base_photo=True).count() != 1:
-    #         raise ValidationError("There should be exact 1 base photo")
+    def clean(self):
+        if self.productphoto_set.filter(base_photo=True).count() != 1:
+            raise ValidationError("There should be exact 1 base photo")

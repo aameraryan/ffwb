@@ -10,9 +10,6 @@ class ProductDetailView(DetailView):
 
     model = Product
 
-    def get_object(self, queryset=None):
-        return super().get_object()
-
 
 class ProductListView(ListView):
     model = Product
