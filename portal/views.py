@@ -4,7 +4,8 @@ from products.models import Product
 from django.contrib import messages
 from .forms import RegisterForm
 from django.contrib.auth import login, authenticate
-
+from carts.models import Cart
+from lazysignup.decorators import allow_lazy_user
 
 class RegisterView(FormView):
 
@@ -29,8 +30,22 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['new_products'] = Product.objects.new_products()
         context['preferred_products'] = Product.objects.preferred_products()
+        context['cart'] = Cart.objects.get_request_cart()
         return context
+
+
+@allow_lazy_user
+def home(request):
+    context = {}
+    context['new_products'] = Product.objects.new_products()
+    context['preferred_products'] = Product.objects.preferred_products()
+    context['cart'] = Cart.objects.get_request_cart(request)
+    return render(request, "portal/home.html", context)
 
 
 class AboutUsView(TemplateView):
     template_name = 'portal/about_us.html'
+
+
+def contact(request):
+    return render(request, "portal/contact.html")

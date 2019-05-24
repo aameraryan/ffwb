@@ -12,7 +12,6 @@ class CartManager(models.Manager):
         return cart
 
     def get_request_cart(self, request):
-        # cart = self.get_or_new_by_user(user_id=request.user.id)
         cart = self.get_or_create(user_id=request.user.id, ordered=False)[0]
         return cart
 

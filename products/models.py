@@ -5,12 +5,21 @@ from django.urls import reverse_lazy
 from django.conf import settings
 from django.db.models.signals import post_save, pre_save
 from django.conf import settings
+from django.utils.text import slugify
 
 USER_MODEL = settings.AUTH_USER_MODEL
 
 
+def add_slug(sender, instance, *args, **kwargs):
+    slug_text = slugify(instance.name)
+    if instance.slug != slug_text:
+        instance.slug = slug_text
+        instance.save()
+
+
 class Size(models.Model):
     name = models.CharField(max_length=32)
+    slug = models.SlugField(blank=True, null=True)
     abbrevation = models.CharField(max_length=8)
     length = models.CharField(max_length=16)
     unit = models.CharField(max_length=16, default="Inch")
@@ -24,8 +33,12 @@ class Size(models.Model):
         return self.abbrevation
 
 
+post_save.connect(add_slug, sender=Size)
+
+
 class Color(models.Model):
     name = models.CharField(max_length=32)
+    slug = models.SlugField(blank=True, null=True)
     abbrevation = models.CharField(max_length=8)
     hex_code = models.CharField(max_length=7, default="#FF0000")
     details = models.TextField(blank=True)
@@ -40,6 +53,9 @@ class Color(models.Model):
     @property
     def get_text(self):
         return self.abbrevation
+
+
+post_save.connect(add_slug, sender=Color)
 
 
 class PhotoPosition(models.Model):
@@ -76,6 +92,7 @@ class ProductPhoto(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=16)
+    slug = models.SlugField(blank=True, null=True)
     details = models.TextField(blank=True)
 
     def __str__(self):
@@ -86,11 +103,15 @@ class Category(models.Model):
         return self.name
 
 
+post_save.connect(add_slug, sender=Category)
+
+
 class Product(models.Model):
 
     PREFERENCE_CHOICES = ((1, 'Excellent'), (2, 'Very Good'), (3, 'Good'), (4, 'Average'))
 
     name = models.CharField(max_length=16)
+    slug = models.SlugField(blank=True, null=True)
     headline = models.CharField(max_length=48)
     details = models.TextField(blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
@@ -122,6 +143,18 @@ class Product(models.Model):
         return self.headline
 
     @property
+    def get_display_name(self):
+        return self.headline
+
+    @property
+    def get_price(self):
+        return self.price
+
+    @property
+    def get_photos(self):
+        return self.productphoto_set.all()
+
+    @property
     def get_base_photo_url(self):
         return self.productphoto_set.get(base_photo=True).photo.url
 
@@ -146,11 +179,15 @@ class Product(models.Model):
         return self.colors.values_list('name', flat=True)
 
     @property
-    def get_size_names(self):
-        return self.sizes.values_list('name', flat=True)
+    def get_sizes(self):
+        return self.sizes.all()
 
     @property
     def get_absolute_url(self):
+        return reverse_lazy('products:product_detail', kwargs={'product_id': self.id})
+
+    @property
+    def get_detail_view_url(self):
         return reverse_lazy('products:product_detail', kwargs={'product_id': self.id})
 
     @property
@@ -164,3 +201,6 @@ class Product(models.Model):
     def clean(self):
         if self.productphoto_set.filter(base_photo=True).count() != 1:
             raise ValidationError("There should be exact 1 base photo")
+
+
+post_save.connect(add_slug, sender=Product)

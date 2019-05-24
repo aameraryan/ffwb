@@ -54,6 +54,34 @@ def add_product(request):
     return JsonResponse({"message": message})
 
 
+def add_entry(request):
+    print("Function Called")
+    print("||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||")
+    if request.method == "POST":
+        post_dict = request.POST
+        cart = Cart.objects.get_request_cart(request)
+        product = get_object_or_404(Product, slug=post_dict['slug'])
+        quantity = int(post_dict['quantity'])
+        color = get_object_or_404(product.colors, slug=post_dict['color'])
+        size = get_object_or_404(product.sizes, slug=post_dict['size'])
+        product_cart_item, is_created = Entry.objects.create_entry(product=product, price=product.price, size=size,
+                                                                   color=color, cart=cart)
+        product_cart_item.quantity = quantity
+        product_cart_item.save()
+        if is_created:
+            message = alert_messages.PRODUCT_ADDED_MESSAGE
+            tag = "success"
+        else:
+            message = alert_messages.PRODUCT_ALREADY_IN_CART
+            tag = "warning"
+    else:
+        message = "We are getting issues. Please try again"
+        tag = "Warning"
+    print(message)
+    return JsonResponse({'message': message, "tag": tag})
+
+
+
 #   NON AJAX - REDIRECTS TO CART VIEW
 #
 # def add_product(request, product_id):

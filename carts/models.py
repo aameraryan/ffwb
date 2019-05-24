@@ -36,6 +36,14 @@ class Cart(models.Model):
     def is_non_empty(self):
         return self.entry_set.all()
 
+    @property
+    def get_entries(self):
+        return self.entry_set.all()
+
+    @property
+    def get_total(self):
+        return self.total
+
 
 def upgrade_total(sender, instance, *args, **kwargs):
     total = instance.entry_set.all().aggregate(Sum('amount')).get('amount__sum', 0.00)
@@ -52,6 +60,10 @@ class Entry(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField(default=1)
+
+    color = models.ForeignKey("products.Color", on_delete=models.CASCADE)
+    size = models.ForeignKey('products.Size', on_delete=models.CASCADE)
+
     price = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
     amount = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 

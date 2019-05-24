@@ -4,7 +4,7 @@ from .models import Product
 
 
 class ProductDetailView(DetailView):
-    template_name = 'products/product_detail.html'
+    template_name = 'products/detail.html'
     pk_url_kwarg = "product_id"
     context_object_name = 'product'
 

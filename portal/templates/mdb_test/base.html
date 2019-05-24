@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    {% block full_title %}
+        <title>{% block title %}base file{% endblock %} | FLS-SURVEY</title>
+    {% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Material Design Bootstrap</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+    <link href="{% static "mdb/css/bootstrap.min.css" %}" rel="stylesheet">
+    <link href="{% static "mdb/css/mdb.min.css" %}" rel="stylesheet">
+    <link href="{% static "mdb/css/style.css" %}" rel="stylesheet">
+
+
+    <style>
+        #choice_label{
+            margin: 5px;
+        }
+    </style>
+
+</head>
+
+<body class="cloudy-knoxville-gradient">
+    {% block content %}
+    {% endblock %}
+
+    <br><br><br>
+
+    <footer class="page-footer fixed-bottom font-small blue-gradient darken-3">
+
+      <!-- Copyright -->
+      <div class="footer-copyright text-center py-3">
+       <a href="http://www.flsystems.co.in/" class="font-weight-bold" target="_blank"><h6 class="font-weight-normal">
+            FINE-LEAP SYSTEMS PVT LTD.</h6></a>
+      </div>
+      <!-- Copyright -->
+
+    </footer>
+
+    <script type="text/javascript" src="{% static "mdb/js/jquery-3.4.0.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "mdb/js/popper.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "mdb/js/bootstrap.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "mdb/js/mdb.min.js" %}"></script>
+    <script>
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = dd + '/' + mm + '/' + yyyy;
+        document.getElementById('my_date').innerText = (today);
+
+    </script>
+
+{% block extrajs %}
+{% endblock %}
+
+
+</body>
+</html>

@@ -1,133 +1,92 @@
 {% extends "portal/base.html" %}
 
-{% block custom_links %}
-    <link rel="stylesheet" href="plugins/themify-icons/themify-icons.css">
-    <link rel="stylesheet" type="text/css" href="plugins/jquery-ui-1.12.1.custom/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="styles/contact_styles.css">
-    <link rel="stylesheet" type="text/css" href="styles/contact_responsive.css">
-{% endblock %}
-
 
 {% block content %}
 
-<div class="super_container">
-
-
-	<div class="container contact_container">
-		<div class="row">
-			<div class="col">
-
-				<!-- Breadcrumbs -->
-
-				<div class="breadcrumbs d-flex flex-row align-items-center">
-					<ul>
-						<li><a href="index.html">Home</a></li>
-						<li class="active"><a href="#"><i class="fa fa-angle-right" aria-hidden="true"></i>Contact</a></li>
-					</ul>
-				</div>
-
-			</div>
-		</div>
-
-		<!-- Map Container -->
-
-		<div class="row">
-			<div class="col">
-				<div id="google_map">
-					<div class="map_container">
-						<div id="map"></div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Contact Us -->
-
-		<div class="row">
-
-			<div class="col-lg-6 contact_col">
-				<div class="contact_contents">
-					<h1>Contact Us</h1>
-					<p>There are many ways to contact us. You may drop us a line, give us a call or send an email, choose what suits you the most.</p>
-					<div>
-						<p>(800) 686-6688</p>
-						<p>info.deercreative@gmail.com</p>
-					</div>
-					<div>
-						<p>mm</p>
-					</div>
-					<div>
-						<p>Open hours: 8.00-18.00 Mon-Fri</p>
-						<p>Sunday: Closed</p>
-					</div>
-				</div>
-
-				<!-- Follow Us -->
-
-				<div class="follow_us_contents">
-					<h1>Follow Us</h1>
-					<ul class="social d-flex flex-row">
-						<li><a href="#" style="background-color: #3a61c9"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-						<li><a href="#" style="background-color: #41a1f6"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-						<li><a href="#" style="background-color: #fb4343"><i class="fa fa-google-plus" aria-hidden="true"></i></a></li>
-						<li><a href="#" style="background-color: #8f6247"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
-					</ul>
-				</div>
-
-			</div>
-
-			<div class="col-lg-6 get_in_touch_col">
-				<div class="get_in_touch_contents">
-					<h1>Get In Touch With Us!</h1>
-					<p>Fill out the form below to recieve a free and confidential.</p>
-					<form action="post">
-						<div>
-							<input id="input_name" class="form_input input_name input_ph" type="text" name="name" placeholder="Name" required="required" data-error="Name is required.">
-							<input id="input_email" class="form_input input_email input_ph" type="email" name="email" placeholder="Email" required="required" data-error="Valid email is required.">
-							<input id="input_website" class="form_input input_website input_ph" type="url" name="name" placeholder="Website" required="required" data-error="Name is required.">
-							<textarea id="input_message" class="input_ph input_message" name="message"  placeholder="Message" rows="3" required data-error="Please, write us a message."></textarea>
-						</div>
-						<div>
-							<button id="review_submit" type="submit" class="red_button message_submit_btn trans_300" value="Submit">send message</button>
-						</div>
-					</form>
-				</div>
-			</div>
-
-		</div>
-	</div>
-
-	<!-- Newsletter -->
-
-	<div class="newsletter">
+	<!-- Content page -->
+	<section class="bg0 p-t-104 p-b-116">
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-6">
-					<div class="newsletter_text d-flex flex-column justify-content-center align-items-lg-start align-items-md-center text-center">
-						<h4>Newsletter</h4>
-						<p>Subscribe to our newsletter and get 20% off your first purchase</p>
-					</div>
-				</div>
-				<div class="col-lg-6">
-					<form action="post">
-						<div class="newsletter_form d-flex flex-md-row flex-column flex-xs-column align-items-center justify-content-lg-end justify-content-center">
-							<input id="newsletter_email" type="email" placeholder="Your email" required="required" data-error="Valid email is required.">
-							<button id="newsletter_submit" type="submit" class="newsletter_submit_btn trans_300" value="Submit">subscribe</button>
+			<div class="flex-w flex-tr">
+				<div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
+					<form>
+						<h4 class="mtext-105 cl2 txt-center p-b-30">
+							Send Us A Message
+						</h4>
+
+						<div class="bor8 m-b-20 how-pos4-parent">
+							<input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="email" placeholder="Your Email Address">
+							<img class="how-pos4 pointer-none" src="images/icons/icon-email.png" alt="ICON">
 						</div>
+
+						<div class="bor8 m-b-30">
+							<textarea class="stext-111 cl2 plh3 size-120 p-lr-28 p-tb-25" name="msg" placeholder="How Can We Help?"></textarea>
+						</div>
+
+						<button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
+							Submit
+						</button>
 					</form>
+				</div>
+
+				<div class="size-210 bor10 flex-w flex-col-m p-lr-93 p-tb-30 p-lr-15-lg w-full-md">
+					<div class="flex-w w-full p-b-42">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-map-marker"></span>
+						</span>
+
+						<div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Address
+							</span>
+
+							<p class="stext-115 cl6 size-213 p-t-18">
+								Coza Store Center 8th floor, 379 Hudson St, New York, NY 10018 US
+							</p>
+						</div>
+					</div>
+
+					<div class="flex-w w-full p-b-42">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-phone-handset"></span>
+						</span>
+
+						<div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Lets Talk
+							</span>
+
+							<p class="stext-115 cl1 size-213 p-t-18">
+								+1 800 1236879
+							</p>
+						</div>
+					</div>
+
+					<div class="flex-w w-full">
+						<span class="fs-18 cl5 txt-center size-211">
+							<span class="lnr lnr-envelope"></span>
+						</span>
+
+						<div class="size-212 p-t-2">
+							<span class="mtext-110 cl2">
+								Sale Support
+							</span>
+
+							<p class="stext-115 cl1 size-213 p-t-18">
+								contact@example.com
+							</p>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
+	</section>	
+	
+	
+	<!-- Map -->
+	<div class="map">
+		<div class="size-303" id="google_map" data-map-x="40.691446" data-map-y="-73.886787" data-pin="images/icons/pin.png" data-scrollwhell="0" data-draggable="1" data-zoom="11"></div>
 	</div>
 
-</div>
 
-{% endblock %}
-
-{% block extrajs %}
-
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCIwF204lFZg1y4kPSIhKaHEXMLYxxuMhA"></script>
-<script src="plugins/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
-<script src="js/contact_custom.js"></script>
 
 {% endblock %}
