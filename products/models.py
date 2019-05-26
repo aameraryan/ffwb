@@ -188,7 +188,7 @@ class Product(models.Model):
 
     @property
     def get_detail_view_url(self):
-        return reverse_lazy('products:product_detail', kwargs={'product_id': self.id})
+        return reverse_lazy('products:detail', kwargs={'product_id': self.id})
 
     @property
     def get_add_to_cart_url(self):

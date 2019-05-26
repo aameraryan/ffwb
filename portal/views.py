@@ -49,3 +49,4 @@ class AboutUsView(TemplateView):
 
 def contact(request):
     return render(request, "portal/contact.html")
+

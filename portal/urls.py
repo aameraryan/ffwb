@@ -9,8 +9,6 @@ urlpatterns = [
     # url(r'^$', views.HomeView.as_view(), name='home'),
     url(r'^$', views.home, name='home'),
 
-    url(r'^mdb$', views.TemplateView.as_view(template_name='mdb_test/home.html'), name='mdb'),
-
     url(r'^login/$', LoginView.as_view(template_name='portal/login.html'), name='login'),
     url(r'^logout/$', LogoutView.as_view(template_name='portal/logout.html'), name='logout'),
     url(r'^register/$', views.RegisterView.as_view(), name='register'),

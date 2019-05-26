@@ -4,7 +4,9 @@ from . import views
 app_name = 'carts'
 
 urlpatterns = [
-    url(r'^$', views.home, name='home'),
+    # url(r'^$', views.home, name='home'),
+    url(r'^$', views.update, name='home'),
+
     # url(r'^add_product/(?P<product_id>[0-9]+)$', views.add_product, name='add_product'),
     url(r'^add_product/$', views.add_product, name='add_product'),
 

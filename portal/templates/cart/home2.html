@@ -96,6 +96,11 @@
         </div>
       </nav>
     </header>
+  {% if messages %}
+    {% for message in messages %}
+        <span class="alert alert-{{ message.tags }}">{{ message }}</span>
+    {% endfor %}
+{% endif %}
 
     <div class="bg-light py-3">
       <div class="container">
@@ -108,12 +113,12 @@
     <div class="site-section">
       <div class="container">
         <div class="row mb-5">
-          <form class="col-md-12" method="post">
-            <div class="site-blocks-table">
+          <form class="col-md-12" method="post" action="{% url "orders:create" %}">
+            <div class="site-blocks-table table-responsive text-nowrap">
               <table class="table table-bordered">
                 <thead>
                   <tr>
-                    <th class="product-thumbnail">Image</th>
+                    <th class="product-thumbnail">Imagei</th>
                     <th class="product-name">Product</th>
                     <th class="product-price">Price</th>
                     <th class="product-quantity">Quantity</th>
@@ -123,37 +128,44 @@
                 </thead>
                 <tbody>
 
-                    {% for product_entry in cart.productentry_set.all %}
+                    {% for entry in cart.entry_set.all %}
                         <tr>
                             <td class="product-thumbnail">
-                              <img src="{{ product_entry.product.get_base_photo_url }}" alt="Image" class="img-fluid">
+                              <img src="{{ entry.product.get_base_photo_url }}" height=200 width="200px" alt="Image" class="img-fluid">
                             </td>
                             <td class="product-name">
-                              <h2 class="h5 text-black">{{ product_entry.product.name }}</h2>
+                              <h2 class="h5 text-black">{{ entry.product.name }}</h2>
                             </td>
-                            <td>{{ product_entry.product.price }}</td>
+                            <td>{{ entry.product.price }}</td>
                             <td>
                               <div class="input-group mb-3" style="max-width: 120px;">
                                 <div class="input-group-prepend">
+                                    <a href="{% url "carts:quantity_update" entry_id=entry.id number="1" %}">
                                   <button class="btn btn-outline-primary js-btn-minus" type="button">&minus;</button>
+                                        </a>
                                 </div>
-                                <input type="text" class="form-control text-center" value="{{ product_entry.quantity }}"
+                                <input name="quantity_{{ entry.product.id }}" type="text" id="quantity_input" class="form-control text-center" value={{ entry.quantity }}
                                        placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                                 <div class="input-group-append">
-                                  <button class="btn btn-outline-primary js-btn-plus" type="button">&plus;</button>
+                                        <a href="{% url "carts:quantity_update" entry_id=entry.id number=1 %}">
+                                            <button class="btn btn-outline-primary js-btn-plusn" type="button">+</button>
+                                        </a>
                                 </div>
                               </div>
 
                             </td>
-                            <td>{{ product_entry.amount }}</td>
-                            <td><a href="#" class="btn btn-primary btn-sm">X</a></td>
+                            <td><span id="product_amount">{{ entry.amount }}</span></td>
+                            <td><a href="{{ entry.product.get_remove_from_cart_url }}" class="btn btn-primary btn-sm">X</a></td>
                           </tr>
 
                     {% endfor %}
                 </tbody>
               </table>
             </div>
+
+
           </form>
+
         </div>
 
         <div class="row">
@@ -206,7 +218,8 @@
 
                 <div class="row">
                   <div class="col-md-12">
-                    <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Proceed To Checkout</button>
+{#                    <button class="btn btn-primary btn-lg py-3 btn-block" onclick="window.location='checkout.html'"></button>#}
+                      <a class="btn btn-primary btn-lg py-3 btn-block" href="{% url "orders:checkout" %}">Place Order</a>
                   </div>
                 </div>
               </div>
@@ -215,6 +228,13 @@
         </div>
       </div>
     </div>
+
+
+  <div class="jumbotron container">
+      {% for order in orders %}
+          <span class="alert btn btn-info">{{ order }}</span>
+      {% endfor %}
+  </div>
 
     <footer class="site-footer border-top">
       <div class="container">
@@ -300,6 +320,27 @@
   <script src="{% static "js/aos.js" %}"></script>
 
   <script src="{% static "js/main.js" %}"></script>
+
+  {% block extrascript %}
+
+      <script>
+
+      {#$('#quantity_input').change(function() {#}
+      {#    alert(555);#}
+      {#    alert($(this).value)#}
+      {#  });#}
+
+
+        function change_amount(price, value) {
+            alert(value);
+            document.getElementById('product_amount').innerText = price*value;
+        }
+
+      </script>
+
+  {% endblock %}
+
+
 
   </body>
 </html>

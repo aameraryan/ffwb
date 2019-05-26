@@ -29,11 +29,25 @@ def home(request):
                                               'pending_orders': pending_orders, 'delivered_orders': delivered_orders})
 
 
+@allow_lazy_user
 def update(request):
+    cart = Cart.objects.get_request_cart(request=request)
     if request.method == "POST":
         post_dict = request.POST
+        for entry in (entry for entry in post_dict if '_quantity' in entry):
+            entry_obj = get_object_or_404(cart.entry_set, id=str(entry.replace('_quantity', '')))
+            quantity = int(post_dict[entry])
+            if quantity > 0:
+                entry_obj.quantity = quantity
+                entry_obj.save()
+            else:
+                entry_obj.delete()
+        cart = Cart.objects.get_request_cart(request=request)
+        messages.success(request, "")
+        return render(request, "cart/update.html", {'cart': cart})
     else:
-        return redirect('cart:home')
+        return render(request, "cart/update.html", {'cart': cart})
+
 
 #   AJAX REQUEST
 
